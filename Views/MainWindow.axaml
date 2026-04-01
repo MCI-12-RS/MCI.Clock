@@ -1,0 +1,253 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MciClock.ViewModels"
+        x:Class="MciClock.Views.MainWindow"
+        Title="MCI Clock"
+        Width="720" Height="800"
+        MinWidth="720" MinHeight="800"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        Background="#f5f8fa"
+		Icon="/Assets/favicon.ico"
+        x:DataType="vm:MainViewModel">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <DockPanel>
+
+        <!-- Top header bar -->
+        <Border DockPanel.Dock="Top"
+                Background="{StaticResource MciNavyBrush}"
+                Padding="16,10">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <!-- Title -->
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" Spacing="12">
+                    <TextBlock Text="⏰"
+                               FontSize="28"
+                               VerticalAlignment="Center"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="MCI Clock"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="White"/>
+                        <TextBlock Text="Relógio e Cronômetro para Palco"
+                                   FontSize="11"
+                                   Foreground="{StaticResource MciSteelLightBrush}"
+                                   Margin="0,-2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Current time in header -->
+                <TextBlock Grid.Column="2"
+                           Text="{Binding CurrentTime}"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource MciSteelLightBrush}"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Status bar at bottom -->
+        <Border DockPanel.Dock="Bottom"
+                Background="{StaticResource MciNavyDarkBrush}"
+                Padding="16,6">
+            <TextBlock Text="{Binding StatusText}"
+                       FontSize="12"
+                       Foreground="{StaticResource MciSteelLightBrush}"
+                       VerticalAlignment="Center"/>
+        </Border>
+
+        <!-- Main content -->
+        <ScrollViewer Padding="16,12">
+            <StackPanel Spacing="12">
+
+                <!-- Mode Selection -->
+                <Border Background="White" CornerRadius="8" Padding="16,12"
+                        BorderBrush="{StaticResource MciSteelPaleBrush}" BorderThickness="1">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Modo de Exibição"
+                                   FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource MciTextDarkBrush}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <RadioButton Content="🕐  Relógio"
+                                         IsChecked="{Binding IsClockMode}"
+                                         GroupName="Mode"
+                                         FontSize="14"
+                                         Command="{Binding SwitchToClockCommand}"/>
+                            <RadioButton Content="⏱  Cronômetro Regressivo"
+                                         IsChecked="{Binding IsStopwatchMode}"
+                                         GroupName="Mode"
+                                         FontSize="14"
+                                         Command="{Binding SwitchToStopwatchCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Stopwatch Settings -->
+                <Border Background="White" CornerRadius="8" Padding="16,12"
+                        BorderBrush="{StaticResource MciSteelPaleBrush}" BorderThickness="1"
+                        IsVisible="{Binding IsStopwatchMode}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Configuração do Cronômetro"
+                                   FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource MciTextDarkBrush}"/>
+
+                        <!-- Time inputs -->
+                        <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Left">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Horas" FontSize="12"
+                                           Foreground="{StaticResource MciTextMutedBrush}"/>
+                                <NumericUpDown Value="{Binding StopwatchHours}"
+                                               Minimum="0" Maximum="23"
+                                               Width="100" FontSize="16"
+                                               IsEnabled="{Binding !IsStopwatchRunning}"/>
+                            </StackPanel>
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Minutos" FontSize="12"
+                                           Foreground="{StaticResource MciTextMutedBrush}"/>
+                                <NumericUpDown Value="{Binding StopwatchMinutes}"
+                                               Minimum="0" Maximum="59"
+                                               Width="100" FontSize="16"
+                                               IsEnabled="{Binding !IsStopwatchRunning}"/>
+                            </StackPanel>
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Segundos" FontSize="12"
+                                           Foreground="{StaticResource MciTextMutedBrush}"/>
+                                <NumericUpDown Value="{Binding StopwatchSeconds}"
+                                               Minimum="0" Maximum="59"
+                                               Width="100" FontSize="16"
+                                               IsEnabled="{Binding !IsStopwatchRunning}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Alert threshold -->
+                        <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4,0,0">
+                            <TextBlock Text="Alerta nos últimos"
+                                       FontSize="13" VerticalAlignment="Center"
+                                       Foreground="{StaticResource MciTextMutedBrush}"/>
+                            <NumericUpDown Value="{Binding AlertMinutes}"
+                                           Minimum="1" Maximum="30"
+                                           Width="100" FontSize="14"/>
+                            <TextBlock Text="minuto(s)"
+                                       FontSize="13" VerticalAlignment="Center"
+                                       Foreground="{StaticResource MciTextMutedBrush}"/>
+                        </StackPanel>
+
+                        <!-- Stopwatch display preview -->
+                        <Border Background="{StaticResource MciSteelFaintBrush}"
+                                CornerRadius="8" Padding="14,10"
+                                Margin="0,2,0,0">
+                            <TextBlock Text="{Binding StopwatchDisplay}"
+                                       FontSize="36" FontWeight="Bold"
+                                       Foreground="{StaticResource MciNavyBrush}"
+                                       HorizontalAlignment="Center"/>
+                        </Border>
+
+                        <!-- Progress bar -->
+                        <ProgressBar Minimum="0" Maximum="{Binding ProgressMaximum}"
+                                     Value="{Binding ProgressValue}"
+                                     Height="6"
+                                     IsVisible="{Binding IsStopwatchRunning}"/>
+
+                        <!-- Control buttons -->
+                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                            <Button Content="▶  Iniciar"
+                                    Command="{Binding StartStopwatchCommand}"
+                                    IsVisible="{Binding !IsStopwatchRunning}"
+                                    Padding="20,10"
+                                    FontSize="14" FontWeight="SemiBold"
+                                    Background="{StaticResource MciNavyBrush}"
+                                    Foreground="White"
+                                    CornerRadius="6"/>
+                            <Button Content="⏸  Pausar"
+                                    Command="{Binding PauseStopwatchCommand}"
+                                    IsVisible="{Binding IsStopwatchRunning}"
+                                    Padding="20,10"
+                                    FontSize="14" FontWeight="SemiBold"
+                                    Background="{StaticResource MciSteelBrush}"
+                                    Foreground="White"
+                                    CornerRadius="6"/>
+                            <Button Content="▶  Continuar"
+                                    Command="{Binding StartStopwatchCommand}"
+                                    IsVisible="{Binding IsStopwatchPaused}"
+                                    Padding="20,10"
+                                    FontSize="14" FontWeight="SemiBold"
+                                    Background="{StaticResource MciNavyBrush}"
+                                    Foreground="White"
+                                    CornerRadius="6"/>
+                            <Button Content="⏹  Parar"
+                                    Command="{Binding StopStopwatchCommand}"
+                                    IsVisible="{Binding IsStopwatchRunning}"
+                                    Padding="20,10"
+                                    FontSize="14" FontWeight="SemiBold"
+                                    Background="Transparent"
+                                    Foreground="{StaticResource MciNavyBrush}"
+                                    BorderBrush="{StaticResource MciSteelBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"/>
+                            <Button Content="🔄  Resetar"
+                                    Command="{Binding ResetStopwatchCommand}"
+                                    IsVisible="{Binding !IsStopwatchRunning}"
+                                    Padding="20,10"
+                                    FontSize="14" FontWeight="SemiBold"
+                                    Background="Transparent"
+                                    Foreground="{StaticResource MciTextMutedBrush}"
+                                    BorderBrush="{StaticResource MciSteelPaleBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Display Window Settings -->
+                <Border Background="White" CornerRadius="8" Padding="16,12"
+                        BorderBrush="{StaticResource MciSteelPaleBrush}" BorderThickness="1">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Janela de Exibição (Palco)"
+                                   FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource MciTextDarkBrush}"/>
+
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <TextBlock Text="Tela:"
+                                       FontSize="13" VerticalAlignment="Center"
+                                       Foreground="{StaticResource MciTextMutedBrush}"/>
+                            <ComboBox ItemsSource="{Binding AvailableScreens}"
+                                      SelectedIndex="{Binding SelectedScreenIndex}"
+                                      MinWidth="250" FontSize="13"/>
+                        </StackPanel>
+
+                        <CheckBox Content="Preferir segundo monitor automaticamente"
+                                  IsChecked="{Binding ShowOnSecondScreen}"
+                                  FontSize="13"
+                                  Foreground="{StaticResource MciTextMutedBrush}"/>
+
+                        <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4,0,0">
+                            <Button Content="🖥  Abrir Janela de Exibição"
+                                    Command="{Binding OpenDisplayWindowCommand}"
+                                    IsEnabled="{Binding !DisplayWindowOpen}"
+                                    Padding="20,10"
+                                    FontSize="14" FontWeight="SemiBold"
+                                    Background="{StaticResource MciNavyBrush}"
+                                    Foreground="White"
+                                    CornerRadius="6"/>
+                            <Button Content="✕  Fechar Exibição"
+                                    Command="{Binding CloseDisplayWindowCommand}"
+                                    IsEnabled="{Binding DisplayWindowOpen}"
+                                    Padding="20,10"
+                                    FontSize="14" FontWeight="SemiBold"
+                                    Background="Transparent"
+                                    Foreground="{StaticResource MciNavyBrush}"
+                                    BorderBrush="{StaticResource MciSteelBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </DockPanel>
+</Window>

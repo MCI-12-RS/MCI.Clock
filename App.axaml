@@ -1,0 +1,50 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MciClock.App"
+             RequestedThemeVariant="Light">
+    <Application.Resources>
+        <!-- MCI Color Palette -->
+        <Color x:Key="MciNavy">#0f2b3c</Color>
+        <Color x:Key="MciNavyDark">#0a1e2b</Color>
+        <Color x:Key="MciSteel">#7ba7bc</Color>
+        <Color x:Key="MciSteelLight">#9dc3d4</Color>
+        <Color x:Key="MciSteelPale">#d4e5ec</Color>
+        <Color x:Key="MciSteelFaint">#eaf2f6</Color>
+        <Color x:Key="MciTextDark">#0f2b3c</Color>
+        <Color x:Key="MciTextMuted">#4a7080</Color>
+        <Color x:Key="MciTextLight">#ffffff</Color>
+        <Color x:Key="MciAlertRed">#e74c3c</Color>
+        <Color x:Key="MciAlertOrange">#f39c12</Color>
+        <Color x:Key="MciAlertYellow">#f1c40f</Color>
+
+        <SolidColorBrush x:Key="MciNavyBrush" Color="{StaticResource MciNavy}" />
+        <SolidColorBrush x:Key="MciNavyDarkBrush" Color="{StaticResource MciNavyDark}" />
+        <SolidColorBrush x:Key="MciSteelBrush" Color="{StaticResource MciSteel}" />
+        <SolidColorBrush x:Key="MciSteelLightBrush" Color="{StaticResource MciSteelLight}" />
+        <SolidColorBrush x:Key="MciSteelPaleBrush" Color="{StaticResource MciSteelPale}" />
+        <SolidColorBrush x:Key="MciSteelFaintBrush" Color="{StaticResource MciSteelFaint}" />
+        <SolidColorBrush x:Key="MciTextDarkBrush" Color="{StaticResource MciTextDark}" />
+        <SolidColorBrush x:Key="MciTextMutedBrush" Color="{StaticResource MciTextMuted}" />
+        <SolidColorBrush x:Key="MciAlertRedBrush" Color="{StaticResource MciAlertRed}" />
+        <SolidColorBrush x:Key="MciAlertOrangeBrush" Color="{StaticResource MciAlertOrange}" />
+        <SolidColorBrush x:Key="MciAlertYellowBrush" Color="{StaticResource MciAlertYellow}" />
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <!-- Override Fluent accent colors with MCI palette -->
+        <Style Selector="Button.accent">
+            <Setter Property="Background" Value="{StaticResource MciNavyBrush}" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style Selector="Button.accent:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{StaticResource MciSteelBrush}" />
+        </Style>
+
+        <Style Selector="ProgressBar">
+            <Setter Property="Foreground" Value="{StaticResource MciSteelBrush}" />
+            <Setter Property="Background" Value="{StaticResource MciSteelPaleBrush}" />
+        </Style>
+    </Application.Styles>
+</Application>
